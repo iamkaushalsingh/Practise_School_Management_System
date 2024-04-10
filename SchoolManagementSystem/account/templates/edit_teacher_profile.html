@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Edit Teacher Profile
+{% endblock title %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h2>Edit Teacher Profile : {{ profile.user.username }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <form method="POST">
+                {% csrf_token %}
+                {% if error %}
+                    {{ error }}
+                {% endif %}
+                {% for field in form %}
+                    {% if not 'Password' in field.label %}
+                        <div class="form-group my-3 col-4">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% if field.name == "address" %}
+                                <textarea class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" rows="4">{{ field.value }}</textarea>
+                                
+                            {% elif field.field.widget.input_type == 'text' %}
+                                <input type="text" class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}" aria-describedby="helpId" placeholder="{{ field.placeholder }}" value="{{ field.value }}"/>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                            
+                            {% if field.help_text %}
+                                <small id="{{ field.id_for_label }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <button class="btn btn-success" type="submit"> Save Changes </button>
+                <a class="btn btn-danger" role="button" href="{% url 'profile_view' %}"> Cancel Changes </a>
+            </form>
+        </div>
+    </div>
+{% endblock main %}

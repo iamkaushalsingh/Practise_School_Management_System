@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Teacher Dashboard
+{% endblock title %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <h1>Teacher Dashboard</h1>            
+        </div>
+        <div class="row">
+            <h3>Posted Internships</h3>
+        </div>
+        <div class="row">
+            {% for internship in internships %}
+            <div class="col-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ internship.title }}
+                            &nbsp;
+                            {% if not internship.is_active %}
+                                <span class="badge text-bg-success">Available</span>
+                            {% else %}
+                                <span class="badge text-bg-danger">Unavailable</span>
+                            {% endif %}
+                        </h5>
+                        <p class="card-text">
+                            Salary: {{ internship.salary }}
+                            <br>
+                            Description: {{ internship.description }}
+                        </p>
+                        <p class="card-text text-end">
+                            <a href="{% url 'internship_applications' internship.id %}">View</a> 
+                            {% if internship.teacher == user %}
+                            | <a href="{% url 'edit_internship' internship.id %}">Edit</a> 
+                            | <a href="{% url 'delete_internship' internship.id %}">Delete</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <div class="col-4 mb-1">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><p>No internships posted yet.</p></h5>
+                            <p class="card-text">
+                                <p>Post a new internship below.</p>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <a href="{% url 'post_internship' %}" role="button" class="btn btn-success">Post New Internship</a>            
+            </div>
+        </div>
+    </div>
+{% endblock main %}

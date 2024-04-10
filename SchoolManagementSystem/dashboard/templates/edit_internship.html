@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Edit Internship
+{% endblock title %}
+
+{% block main %}
+    <div class="container">
+        <div class="col">
+            <h2>Edit Internship</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% if error %}
+                    {{ error }}
+                {% endif %}
+                {% for field in form %}
+                    <div class="form-group my-3 col-4">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {% if field.name == "description" %}
+                            <textarea class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" rows="4">{{ field.value }}</textarea>
+                        {% elif field.field.widget.input_type == 'text' or field.field.widget.input_type == 'number' %}
+                            <input type="text" class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}" aria-describedby="helpId" placeholder="{{ field.placeholder }}" value="{{ field.value }}"/>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        
+                        {% if field.help_text %}
+                            <small id="{{ field.id_for_label }}Help" class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-success">Save Changes</button>
+            </form>
+        </div>
+    </div>
+{% endblock main %}
