@@ -1,0 +1,2 @@
+# Practise_School_Management_System
+Django Project
